@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>R2sample</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">R2sample</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(R2sample)</span></code></pre></div>
+<p>This package brings together a number of routines for the two sample
+problem for univariate data. There are two data sets x and y and we want
+to test whether they were generated by the same probability
+distribution.</p>
+<p>The highlights of this package are:</p>
+<ul>
+<li>it runs a large number of tests simultaneously.<br />
+</li>
+<li>the user can provide their own tests<br />
+</li>
+<li>it works for continuous and for discrete data.<br />
+</li>
+<li>it uses a permutation test to find p values (except for chi square
+tests).</li>
+<li>tests can be combined and a single adjusted p value found<br />
+</li>
+<li>for large continuous data sets p values can be found via large
+sample theory.</li>
+<li>it uses Rcpp and parallel programming to be very fast.<br />
+</li>
+<li>it includes routines that make power studies very simple.</li>
+</ul>
+<div id="example-1" class="section level2">
+<h2>Example 1</h2>
+<p>We generate two data sets of size 100 and 120 respectively from
+standard normal distributions and run the test:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span></code></pre></div>
+<p><strong>Note</strong> all examples run with arguments <em>B=500,
+maxProcessor = 2</em> in order to pass <em>devtools::check()</em></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>x1 <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>y1 <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">12</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">twosample_test</span>(x1, y1, <span class="at">B=</span><span class="dv">500</span>, <span class="at">maxProcessor =</span> <span class="dv">2</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; $statistics</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;       KS   Kuiper      CvM       AD       LR       ZA       ZK       ZC </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;  0.20000  0.31660  0.05303  0.27040  0.12230 -3.17700  0.30790 -2.78800 </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   Wassp1 ES large ES small EP large EP small </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;  0.27970  1.03000  0.13000  0.49000  0.10000 </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; $p.values</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;       KS   Kuiper      CvM       AD       LR       ZA       ZK       ZC </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;   0.9200   0.9060   0.9480   0.9480   0.9320   0.9540   0.9620   0.9540 </span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;   Wassp1 ES large ES small EP large EP small </span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;   0.9480   0.5985   0.9369   0.7831   0.9490</span></span></code></pre></div>
+<p>In this case the the null hypothesis is true, both data sets were
+generated by a standard normal distribution. And indeed, all 13 tests
+have p values much larger than (say) 0.05 and therefore correctly fail
+to reject the null hypothesis.</p>
+<p>Alternatively one might wish to carry out a select number of tests,
+but then find a correct p value for the combined test. This can be done
+as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">twosample_test_adjusted_pvalue</span>(x1, y1, <span class="at">B=</span><span class="fu">c</span>(<span class="dv">500</span>,<span class="dv">500</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; p values of individual tests:</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; ES small :  0.9369</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; ZA :  0.02</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; ZK :  0</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Wassp1 :  0.05</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; Kuiper :  0.08</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; adjusted p value of combined tests: 0.014</span></span></code></pre></div>
+<p>By default for continuous data this runs four tests (chi square with
+a small number of bins, ZA, ZK and Wassp1). It the finds the smallest p
+value (here 0.02) and adjusts it for the multiple testing problem,
+resulting in an overall p value of 0.05.</p>
+<div id="new-tests" class="section level3">
+<h3>New Tests</h3>
+<p>Say we wish to use two new tests. One based on the difference in
+standardized means and the based on the difference in standard
+deviations:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;TS_1 = sd(x) - sd(y) \\
+&amp;TS_2 = \bar{x}/sd(x) - \bar{y}/sd(y) \\
+\end{aligned}
+\]</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>myTS1 <span class="ot">=</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>   out <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>   out[<span class="dv">1</span>] <span class="ot">=</span> <span class="fu">abs</span>(<span class="fu">sd</span>(x) <span class="sc">-</span> <span class="fu">sd</span>(y))</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>   out[<span class="dv">2</span>] <span class="ot">=</span> <span class="fu">abs</span>(<span class="fu">mean</span>(x)<span class="sc">/</span><span class="fu">sd</span>(x) <span class="sc">-</span> <span class="fu">mean</span>(y)<span class="sc">/</span><span class="fu">sd</span>(y))</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>   <span class="fu">names</span>(out) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;std&quot;</span>, <span class="st">&quot;std t test&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>   out</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>}</span></code></pre></div>
+<p>Then we can simply run</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">twosample_test</span>(x1, y1, <span class="at">TS=</span>myTS1, <span class="at">B=</span><span class="dv">500</span>, <span class="at">maxProcessor =</span> <span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; $statistics</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;        std std t test </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;    0.05832    0.01233 </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; $p.values</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;        std std t test </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;      0.854      0.966</span></span></code></pre></div>
+<p>Note that the output vector of the routine has to be a
+<strong>named</strong> vector. If the routine is written in Rcpp
+parallel programming is not available.</p>
+<p>If needed one can also supply the argument <em>TSextra</em>. This has
+to be a list, which will be passed directly to TS. In this way one can
+add items that might be needed for calculation of the test
+statistics.</p>
+</div>
+</div>
+<div id="example-2" class="section level2">
+<h2>Example 2</h2>
+<p>Here we generate two data sets of size 1000 and 1200 respectively
+from a binomial distribution with 5 trials and success probabilities of
+0.5 and 0.55, respectively.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>x2 <span class="ot">=</span> <span class="fu">table</span>(<span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>,<span class="fu">rbinom</span>(<span class="dv">1000</span>, <span class="dv">5</span>, <span class="fl">0.5</span>)))<span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>y2 <span class="ot">=</span> <span class="fu">table</span>(<span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>,<span class="fu">rbinom</span>(<span class="dv">1200</span>, <span class="dv">5</span>, <span class="fl">0.55</span>)))<span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">rbind</span>(x2, y2)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;     0   1   2   3   4  5</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; x2 22 156 315 320 154 33</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; y2 20 119 303 435 260 63</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">twosample_test</span>(x2, y2, <span class="at">vals=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">B=</span><span class="dv">500</span>, <span class="at">maxProcessor =</span> <span class="dv">2</span>)<span class="sc">$</span>p.values</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;     KS Kuiper    CvM     AD     LR     ZA Wassp1  large  small </span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;      0      0      0      0      0      0      0      0      0</span></span></code></pre></div>
+<p>In this case the the null hypothesis is false, all nine tests for
+discrete data have p values much smaller than (say) 0.05 and therefore
+correctly reject the null hypothesis.</p>
+<p>Notice, it is the presence of the <em>vals</em> argument that tells
+the <em>twosample_test</em> command that the data is discrete. The
+vectors x and y are the counts. Note that the lengths of the three
+vectors have to be the same and no value of vals is allowed that has
+both x and y equal to 0.</p>
+<div id="new-test" class="section level3">
+<h3>New Test</h3>
+<p>Again we might want to run a different test, say based again on the
+difference in standardized means. This time we will implement the new
+test using Rcpp:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> Rcpp<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>NumericVector myTS2<span class="op">(</span>IntegerVector x<span class="op">,</span> </span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                         IntegerVector y<span class="op">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                         NumericVector vals<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  </span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  Rcpp<span class="op">::</span>CharacterVector methods<span class="op">=</span>CharacterVector<span class="op">::</span>create<span class="op">(</span><span class="st">&quot;std t test&quot;</span><span class="op">);</span>    </span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="dt">int</span> <span class="at">const</span> nummethods<span class="op">=</span>methods<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  <span class="dt">int</span> k<span class="op">=</span>x<span class="op">.</span>size<span class="op">(),</span> n<span class="op">=</span>sum<span class="op">(</span>x<span class="op">),</span> i<span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="dt">double</span> meanx<span class="op">=</span><span class="fl">0.0</span><span class="op">,</span> meany<span class="op">=</span><span class="fl">0.0</span><span class="op">,</span> sdx<span class="op">=</span><span class="fl">0.0</span><span class="op">,</span> sdy<span class="op">=</span><span class="fl">0.0</span><span class="op">;</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  NumericVector TS<span class="op">(</span>nummethods<span class="op">);</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  TS<span class="op">.</span>names<span class="op">()</span> <span class="op">=</span>  methods<span class="op">;</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span>i<span class="op">=</span><span class="dv">0</span><span class="op">;</span>i<span class="op">&lt;</span>k<span class="op">;++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>    meanx <span class="op">=</span> meanx <span class="op">+</span> x<span class="op">[</span>i<span class="op">]*</span>vals<span class="op">[</span>i<span class="op">]/</span>n<span class="op">;</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>    meany <span class="op">=</span> meany <span class="op">+</span> y<span class="op">[</span>i<span class="op">]*</span>vals<span class="op">[</span>i<span class="op">]/</span>n<span class="op">;</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span>i<span class="op">=</span><span class="dv">0</span><span class="op">;</span>i<span class="op">&lt;</span>k<span class="op">;++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>    sdx <span class="op">=</span> sdx <span class="op">+</span> x<span class="op">[</span>i<span class="op">]*(</span>vals<span class="op">[</span>i<span class="op">]</span> <span class="op">-</span> meanx<span class="op">)*(</span>vals<span class="op">[</span>i<span class="op">]</span> <span class="op">-</span> meanx<span class="op">);</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    sdy <span class="op">=</span> sdy <span class="op">+</span> y<span class="op">[</span>i<span class="op">]*(</span>vals<span class="op">[</span>i<span class="op">]</span> <span class="op">-</span> meany<span class="op">)*(</span>vals<span class="op">[</span>i<span class="op">]</span> <span class="op">-</span> meany<span class="op">);</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  <span class="op">}</span>  </span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  sdx <span class="op">=</span> sqrt<span class="op">(</span>sdx<span class="op">/(</span>n<span class="op">-</span><span class="dv">1</span><span class="op">));</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  sdy <span class="op">=</span> sqrt<span class="op">(</span>sdy<span class="op">/(</span>n<span class="op">-</span><span class="dv">1</span><span class="op">));</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>  TS<span class="op">(</span><span class="dv">0</span><span class="op">)</span> <span class="op">=</span> <span class="bu">std::</span>abs<span class="op">(</span>meanx<span class="op">/</span>sdx <span class="op">-</span> meany<span class="op">/</span>sdy<span class="op">);</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>  <span class="cf">return</span> TS<span class="op">;</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Now</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">twosample_test</span>(x2, y2, <span class="at">vals=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">TS=</span>myTS2, <span class="at">B=</span><span class="dv">500</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; $statistics</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; std t test </span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt;     0.2053 </span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; $p.values</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; std t test </span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;      0.008</span></span></code></pre></div>
+</div>
+</div>
+<div id="permutation-method" class="section level2">
+<h2>Permutation Method</h2>
+<p>For all the tests except the chi square variants the p values are
+found via the permutation method. The idea of a permutation test is
+simple. Say we have data sets <span class="math inline">\(x_1,..,x_n\)</span> and <span class="math inline">\(y_1,..,y_m\)</span>. They are combined into one
+large data set, permuted and split again in sets of sizes n and m. Under
+the null hypothesis these new data sets come from the same distribution
+as the actual data. Therefore calculating the tests statistics for them
+and repeating many times one can build up the distributions of the test
+statistics and find p values from them.</p>
+<p>In the discrete case the situation is somewhat more complicated. Say
+we have data sets with values <span class="math inline">\(v_1,..,v_k\)</span> and counts <span class="math inline">\(x_1,..,x_n\)</span>, <span class="math inline">\(y_1,..,y_k\)</span>. One can then mimic the
+description above by expanding these to yield a large data set with
+<span class="math inline">\(x_1+y_1\)</span> <span class="math inline">\(v_1\)</span>’s, <span class="math inline">\(x_2+y_2\)</span> <span class="math inline">\(v_2\)</span>’s and so on. Then this vector is
+permuted and split as described above. The drawback of this sampling
+method is that its calculation speed increases with the sample size.
+Alternatively R2sample provides the following option. One can show that
+the distribution of the permuted data sets has the following
+distribution: let <span class="math inline">\(n=\sum x_i\)</span> and
+<span class="math inline">\(m=\sum y_i\)</span>, then</p>
+<p><span class="math display">\[P(X=a|x,y)=\frac{\prod_{j=1}^k{{x_j+y_j}\choose{a_j}}}{{n+m}\choose{n}}\]</span>
+for any <span class="math inline">\(a\)</span> such that <span class="math inline">\(0\le a_i \le x_i; i=1,..,k\)</span> and <span class="math inline">\(\sum a=n\)</span>. Sampling from this distribution
+can be done using MCMC. R2sample uses the Metropolis-Hastings algorithm
+as follows: in each step two coordinates <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> with <span class="math inline">\(1\le
+i,j \le k, i\ne j\)</span> are chosen randomly. Then the proposal <span class="math inline">\(a_i=x_i+1, a_j=x_j-1, b_i=y_i-1,
+b_j=y_j+1\)</span>, <span class="math inline">\(a=x, b=y\)</span> is
+accepted with probability</p>
+<p><span class="math display">\[\frac{P(X=a|x,y)}{P(X=x|x,y)}=\frac{(x_i+y_i-a_i)a_j}{(x_j+y_j+1-a_j)(a_i+1)}\]</span>
+As is generally the case with MCMC simulation one needs a larger number
+of simulations than with independence sampling. The default is
+independence sampling size with a simulation size of 5000 for testing
+and (1000, 1000) for power estimation. If the sample sizes are very
+large this might run quite slowly and it might be advisable to change to
+samplingmethod=“MCMC”.</p>
+<p>Of course MCMC sampling suffers from the usual issues of having to
+reach the stationary distribution. In the current situation a two-sample
+test is likely only done if the two data sets are reasonably close, and
+so the MCMC algorithm should start essentially at the stationary
+distribution and no burn-in period is required.</p>
+<p>On a standard pc (as of 2024) independence sampling of two data sets
+with 10000 observation each takes only a few seconds and so is perfectly
+doable.</p>
+</div>
+<div id="the-testing-methods" class="section level2">
+<h2>The Testing Methods</h2>
+<p>In the continuous case we have a sample x of size of n and a sample y
+of size m. In the discussion below both are assumed to be ordered. We
+denote by z the combined sample. In the discrete case we have a random
+variable with values v, and x and y are the counts. We denote by k the
+number of observed values.</p>
+<p>We denote the edf’s of the two data sets by <span class="math inline">\(\widehat{F}\)</span> and <span class="math inline">\(\widehat{G}\)</span>, respectively. Moreover we
+denote the empirical distribution function of the combined data set by
+<span class="math inline">\(\widehat{H}\)</span>.</p>
+<ul>
+<li><strong>chi large</strong></li>
+</ul>
+<p>In the case of continuous data, it is binned into <em>nbins[1]</em>
+equal probability bins, with the default <em>nbins[1]=100</em>. In the
+case of discrete data the number of classes comes from <em>vals</em>,
+the values observed.</p>
+<p>Then a standard chi square test is run and the p value is found using
+the usual chi square approximation.</p>
+<ul>
+<li><strong>chi small</strong></li>
+</ul>
+<p>Many previous studies have shown the a chi square test with a large
+number of classes often has very poor power. So this test in the case of
+continuous data uses <em>nbins[2]</em> equal probability bins, with the
+default <em>nbins[2]=10</em>. In the case of discrete data if the number
+of classes exceeds <em>nbins[2]=10</em> the classes are combined until
+there are <em>nbins[2]=10</em> classes.</p>
+<p>In either case the p values are found using the usual chi-square
+approximation. The degrees of freedom are the number of bins. For a
+literature review of chi square tests see <span class="citation">(W.
+Rolke 2021)</span>.</p>
+<hr />
+<p>For all other tests the p values are found using a permutation test.
+They are</p>
+<ul>
+<li><strong>KS</strong> Kolmogorov-Smirnov test</li>
+</ul>
+<p>This test is based on the quantity <span class="math inline">\(\max\{|\widehat{F}(x)-\widehat{G}(x)|:x\in
+\mathbf{R}\}\)</span>. In the continuous case (without ties) the
+function <span class="math inline">\(\widehat{F}(x)-\widehat{G}(x)\)</span> either
+takes a jump of size <span class="math inline">\(1/n\)</span> up at a
+point in the x data set, a jump of size <span class="math inline">\(1/m\)</span> down if x is a point in the y data
+set, or is flat. Therefore the test statistic is</p>
+<p><span class="math display">\[\max\{\sum_{i=1}^{j} \vert \frac1n
+I\{z_i \in x\}-\frac1m I\{z_i \in y\} \vert:j=1,..,n+m\}\]</span></p>
+<p>In the discrete case the jumps have sizes <span class="math inline">\(x_i/n\)</span> and <span class="math inline">\(y_j/m\)</span>, respectively and the test
+statistic is</p>
+<p><span class="math display">\[\max\{\sum_{i=1}^{j} \vert \frac{x_i}n
+-\frac{y_j}m \vert:j=1,..,k\}\]</span></p>
+<p>This test was first proposed in <span class="citation">(Kolmogorov
+1933)</span>, <span class="citation">(Smirnov 1939)</span> and is one of
+the most widely used tests today.</p>
+<p>There is a close connection between the edf’s and the ranks of the x
+and y in the combined data set. Using this one can also calculate the KS
+statistic, and many statistics to follow, based on these ranks. This is
+used in many software routines, for example the ks.test routine in R.
+However, when applied to discrete data these formulas can fail badly
+because of the many ties, and so we will not use them in our
+routine.</p>
+<ul>
+<li><strong>Kuiper</strong> Kuiper’s test</li>
+</ul>
+<p>This test is closely related to Kolmogorov-Smirnov, but it uses the
+sum of the largest positive and negative differences between the edf’s
+as a test statistic:</p>
+<p><span class="math display">\[T_x=\sum_{i=1}^{j} \vert \frac1n I\{z_i
+\in x\}-\frac1m I\{z_i \in x\} \vert:j=1,..,n\]</span> <span class="math display">\[T_y=\sum_{i=1}^{j} \vert \frac1n I\{z_i \in
+y\}-\frac1m I\{z_i \in y\} \vert:j=1,..,m\]</span> and the the test
+statistic is <span class="math inline">\(T_x-T_y\)</span>. The discrete
+case follows directly. This test was first proposed in <span class="citation">(Kuiper 1960)</span>.</p>
+<ul>
+<li><strong>CvM</strong> Cramer-vonMises test</li>
+</ul>
+<p>This test is based on the integrated squared difference between the
+edf’s:</p>
+<p><span class="math display">\[\frac{nm}{(n+m)^2}\sum_{i=1}^{n+m}
+\left( \hat{F}(z_i)-\hat{G}(z_i) \right)^2 \]</span> the extension to
+the two-sample problem of the Cramer-vonMises criterion is discussed in
+<span class="citation">(T. W. Anderson 1962)</span>.</p>
+<ul>
+<li><strong>AD</strong> Anderson-Darling test</li>
+</ul>
+<p>This test is based on</p>
+<p><span class="math display">\[nm\sum_{i=1}^{n+m-1} \frac{\left(
+\hat{F}(z_i)-\hat{G}(z_i) \right)^2}{i(n-i)} \]</span></p>
+<p>It was first proposed in <span class="citation">(Theodore W.
+Anderson, Darling, et al. 1952)</span>.</p>
+<ul>
+<li><strong>LR</strong> Lehmann-Rosenblatt test</li>
+</ul>
+<p>Let <span class="math inline">\(r_i\)</span> and <span class="math inline">\(s_i\)</span> be the ranks of x and y in the
+combined sample, then the test statistic is given by</p>
+<p><span class="math display">\[\frac1{nm(n+m)}\left[n\sum_{i=1}^n(r_i-1)^2+m\sum_{i=1}^m(s_i-1)^2\right]\]</span>
+<span class="citation">(Lehmann 1951)</span> and <span class="citation">(Rosenblatt 1952)</span></p>
+<ul>
+<li><strong>ZA, ZK and ZC</strong> Zhang’s tests</li>
+</ul>
+<p>These tests are based on the paper <span class="citation">(Zhang
+2006)</span>. Note that the calculation of <em>ZC</em> is the one
+exception from the rule: even in the discrete data case the calculation
+of the test statistic does require loops of lengths n and m. The
+calculation time will therefore increase with the sample sizes, and for
+very large data sets this test might have to be excluded.</p>
+<ul>
+<li><strong>Wassp1</strong> Wasserstein p=1 test</li>
+</ul>
+<p>A test based on the Wasserstein p1 metric. It compares the quantiles
+of the x and y in the combined data set. If n=m the test statistic in
+the continuous case is very simple:</p>
+<p><span class="math display">\[ \frac1n\sum_{i=1}^n |x_i-y_i|\]</span>
+If <span class="math inline">\(n\ne m\)</span> it is first necessary to
+find the respective quantiles of the x’s and y’s in the combined data
+set. In the discrete case the test statistic is</p>
+<p><span class="math display">\[\sum_{i=1}^{k-1} \vert
+\sum_{j=1}^i\frac{x_j}{n}-\sum_{j=1}^i\frac{y_j}{m}  \vert(v_{i+1}-v_i)\]</span></p>
+<p>For a discussion of the Wasserstein distance see <span class="citation">(Vaserstein 1969)</span>.</p>
+<div id="the-arguments" class="section level3">
+<h3>The Arguments</h3>
+<p>The routine has the following arguments:</p>
+<ul>
+<li><p><strong>x</strong> and <strong>y</strong> are numeric vectors. In
+the continuous data case they are simply the data, in the discrete case
+the counts.</p></li>
+<li><p><strong>vals</strong> a numeric vector of values of the discrete
+random variable. If missing continuous data is assumed. In the discrete
+case x, y and vals have to be vectors of equal length.</p></li>
+<li><p><strong>TS</strong> a routine to calculate a test statistic. If
+missing built-in tests are used.</p></li>
+<li><p><strong>TSextra</strong> a list to be passed to TS.</p></li>
+<li><p><strong>B=5000</strong> number of simulation runs for permutation
+test. If B=0 only test statistics are found.</p></li>
+<li><p><strong>nbins=c(100, 10)</strong> number of bins to use for
+chi-square test. In the continuous data case bins are found
+equi-probable via the quantiles of the combined data set. In the
+discrete case nbins[1] is changed to the number of values, so the
+chi-square test is done on the original data set. Then neighboring
+values are combined until there are nbins[2] classes.</p></li>
+<li><p><strong>maxProcessor</strong> if &gt;1 parallel computing is
+used.</p></li>
+<li><p><strong>doMethods</strong> a character vector giving the names of
+the methods to include.</p></li>
+</ul>
+<p>Say for example we want to use only the KS and AD tests:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>x<span class="ot">=</span><span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>y<span class="ot">=</span><span class="fu">rnorm</span>(<span class="dv">12</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">twosample_test</span>(x, y, <span class="at">B=</span><span class="dv">500</span>, <span class="at">maxProcessor =</span> <span class="dv">2</span>, <span class="at">doMethods=</span><span class="fu">c</span>(<span class="st">&quot;KS&quot;</span>,<span class="st">&quot;AD&quot;</span>))</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; $statistics</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt;        KS        AD </span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; 0.1833333 0.2442214 </span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; $p.values</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt;    KS    AD </span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 0.958 0.976</span></span></code></pre></div>
+</div>
+<div id="the-output" class="section level3">
+<h3>The Output</h3>
+<p>A list with vectors statistics (the test statistics) and
+p.values.</p>
+</div>
+<div id="shiny-app" class="section level3">
+<h3><em>shiny app</em></h3>
+<p>The tests can also be run via a shiny app. To do so run</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">run_shiny</span>()</span></code></pre></div>
+</div>
+<div id="twosample_power-and-plot_power" class="section level3">
+<h3><strong>twosample_power</strong> and
+<strong>plot_power</strong></h3>
+<p>The routine <em>twosample_power</em> allows the estimation of the
+power of the various tests, and <em>plot_power</em> draws the
+corresponding power graph with the methods sorted by their mean
+power.</p>
+<p>Note that due to the use of permutation tests the power calculations
+are fairly slow. Because of the time constraints imposed by CRAN the
+following routines are not run. A full power study with (say) 25
+alternatives and fairly large data sets might take several hours to
+run.</p>
+<p>New tests can be used in the same way as above.</p>
+</div>
+<div id="example-3" class="section level3">
+<h3>Example 3</h3>
+<p>Say we wish to find the powers of the tests when one data set comes
+from a standard normal distribution with sample size 100 and the other
+from a t distribution with 1-10 degrees of freedom and sample size
+200.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">plot_power</span>(<span class="fu">twosample_power</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="at">f=</span><span class="cf">function</span>(df) <span class="fu">list</span>(<span class="at">x=</span><span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">y=</span><span class="fu">rt</span>(<span class="dv">200</span>, df)), <span class="at">df=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>)</span></code></pre></div>
+<p>The arguments of <strong>twosample_power</strong> are</p>
+<ul>
+<li><p><strong>f</strong> A function that generates data sets x and y,
+either continuous or the counts of discrete variables. In the discrete
+case care needs to be taken that the resulting vectors have the same
+length as <em>vals</em>. The output has to be a list with elements x and
+y. In the case of discrete data the list also has to include a vector
+<strong>vals</strong>, the values of the discrete variable.</p></li>
+<li><p><strong>…</strong> arguments passed to f. The most common case
+would be a single vector, but two vectors or none is also
+possible.</p></li>
+<li><p><strong>alpha=0.05</strong> type I error probability to use in
+power calculation</p></li>
+<li><p><strong>B=c(1000, 1000)</strong> number of simulation runs for
+power estimation and estimation of p values.</p></li>
+<li><p><strong>TS</strong> a routine to calculate a test statistic. If
+missing built-in tests are used.</p></li>
+<li><p><strong>TSextra</strong> a list to be passed to TS.</p></li>
+<li><p><strong>nbins=c(100,10)</strong> Number of bins to use in chi
+square tests</p></li>
+<li><p><strong>maxProcessor</strong> if &gt;1 parallel programming is
+used</p></li>
+</ul>
+<p>The arguments of <strong>plot_power</strong> are a matrix of powers
+created by <strong>twosample_power</strong> and (optional) Smooth=FALSE
+if no smoothing is desired and a name of the variable on the x axis.</p>
+</div>
+<div id="example-4" class="section level3">
+<h3>Example 4</h3>
+<p>We wish to find the powers of the tests when the data set x are 100
+observations comes from a binomial n=10, p=0.5 and y 120 observations
+from from a binomial n=10 and a number of different success
+probabilities p. Note that in either case not all the possible values
+0-10 will actually appear in every data set, so we need to take some
+care in assuring that x, y and vals match every time:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">plot_power</span>(<span class="fu">twosample_power</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="cf">function</span>(p) {</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    vals<span class="ot">=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>    x<span class="ot">=</span><span class="fu">table</span>(<span class="fu">c</span>(vals, <span class="fu">rbinom</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="fl">0.5</span>))) <span class="sc">-</span> <span class="dv">1</span> <span class="co">#Make sure each vector has length 11</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>    y<span class="ot">=</span><span class="fu">table</span>(<span class="fu">c</span>(vals, <span class="fu">rbinom</span>(<span class="dv">120</span>, <span class="dv">10</span>, p))) <span class="sc">-</span> <span class="dv">1</span>  <span class="co">#and names 1-10</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>    vals<span class="ot">=</span>vals[x<span class="sc">+</span>y<span class="sc">&gt;</span><span class="dv">0</span>] <span class="co"># only vals with at least one count</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">x=</span>x[<span class="fu">as.character</span>(vals)],<span class="at">y=</span>y[<span class="fu">as.character</span>(vals)], <span class="at">vals=</span>vals)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  },</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  <span class="at">p=</span><span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="at">length=</span><span class="dv">5</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>), <span class="st">&quot;p&quot;</span>)</span></code></pre></div>
+</div>
+<div id="example-5" class="section level3">
+<h3>Example 5</h3>
+<p>We want to assess the effect of the sample size when one data set
+comes from a standard normal and the other from a normal with mean 1 and
+standard deviation 1:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">plot_power</span>(<span class="fu">twosample_power</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="at">f=</span><span class="cf">function</span>(n) <span class="fu">list</span>(<span class="at">x=</span><span class="fu">rnorm</span>(n), <span class="at">y=</span><span class="fu">rnorm</span>(n, <span class="dv">1</span>)),</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="at">n=</span><span class="dv">10</span><span class="sc">*</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Anderson1962" class="csl-entry">
+Anderson, T. W. 1962. <span>“On the Distribution of the Two_sample
+Cramer-von Mises Criterion.”</span> <em>The Annals of Mathematical
+Statistics</em> 33(3): 1148–59.
+</div>
+<div id="ref-anderson1952" class="csl-entry">
+Anderson, Theodore W, Donald A Darling, et al. 1952. <span>“Asymptotic
+Theory of Certain Goodness of Fit Criteria Based on Stochastic
+Processes.”</span> <em>The Annals of Mathematical Statistics</em> 23
+(2): 193–212.
+</div>
+<div id="ref-Kolmogorov1933" class="csl-entry">
+Kolmogorov, A. N. 1933. <span>“Sulla Determinazione Empirica Di Una
+Legge Di Distribuzione.”</span> <em>Giornale Dell’Instituto Italiano
+Degli Attuari</em> 4: 83–91.
+</div>
+<div id="ref-Kuiper1960" class="csl-entry">
+Kuiper, N. H. 1960. <span>“Tests Concerning Random Points on a
+Circle.”</span> <em>Proceedings of the Koninklijke Nederlandse Akademie
+van Wetenschappen</em> 63: 38–47.
+</div>
+<div id="ref-lehmann1951" class="csl-entry">
+Lehmann, E. L. 1951. <span>“Consistency and Unbiasedness of Certain
+Nonparametric Tests.”</span> <em>Ann. MAth. Statist.</em> 22(1): 165–79.
+</div>
+<div id="ref-rosenblatt1952" class="csl-entry">
+Rosenblatt, M. 1952. <span>“Limit Theorems Associated with Variants of
+the von Mises Statistic.”</span> <em>Ann. Math. Statist.</em> 23:
+617–23.
+</div>
+<div id="ref-Smirnov1939" class="csl-entry">
+Smirnov, N. V. 1939. <span>“Estimate of Deviation Between Empirical
+Distribution Functions in Two Independent Samples.”</span> <em>Bull.
+Moscow Univ.</em> 2: 3–16.
+</div>
+<div id="ref-wasserstein1969" class="csl-entry">
+Vaserstein, L. N. 1969. <span>“Markov Processes over Denumerable
+Products of Spaces, Describing Large Systems of Automata.”</span>
+<em>Problemy Peredachi Informatsii</em> 5(3): 64–72.
+</div>
+<div id="ref-rolke2021" class="csl-entry">
+W. Rolke, C. Gutierrez Gongora. 2021. <span>“A Chi-Square
+Goodness-of-Fit Test for Continuous Distributions Against a Known
+Alternative.”</span> <em>Computational Statistics</em>.
+</div>
+<div id="ref-zhang2006" class="csl-entry">
+Zhang, J. 2006. <span>“Powerful Two Sample Tests Based on the Likelihood
+Ratio.”</span> <em>Techometrics</em> 48: 95–103.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
