@@ -1,6 +1,12 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+//' sort vector y by values in vector x
+//' 
+//' @param y numeric vector
+//' @param x numeric vector
+//' @keywords internal
+//' @return numeric vector
 // [[Rcpp::export]]  
 std::vector<double> Cpporder(std::vector<double>& y, std::vector<double>& x) {
     int n=x.size();

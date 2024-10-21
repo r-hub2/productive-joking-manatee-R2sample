@@ -10,7 +10,6 @@ using namespace Rcpp;
 //' @keywords internal
 //' @return A vector of test statistics
 // [[Rcpp::export]]
-
 NumericVector TS_cont(NumericVector x, NumericVector y) {
   
   CharacterVector methods = CharacterVector::create("KS", "Kuiper", "CvM", "AD", "LR", "ZA", "ZK", "ZC", "Wassp1");  

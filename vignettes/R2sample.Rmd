@@ -354,6 +354,47 @@ plot_power(twosample_power(
   n=10*1:10), "n")
 ```
 
+### Adjusted p values for Several Tests
+
+As no single test can be relied upon to consistently have good power, it is reasonable to employ several of them. We would then reject the null hypothesis if any of the tests does so, that is, if the smallest p-value is less than the desired type I error probability $\alpha$. 
+
+This procedure clearly suffers from the problem of simultaneous inference, and the true type I error probability will be much larger than $\alpha$. It is however possible to adjust the p value so it does achieve the desired $\alpha$. This can be done as follows:
+
+We generate a number of data sets under the null hypothesis. Generally about 1000 will be sufficient. Then for each simulated data set we apply the tests we wish to include, and record the smallest p value. Here is an example. . 
+
+```{r eval=FALSE}
+pvals=matrix(0,1000,13)
+for(i in 1:1000) 
+  pvals[i, ]=R2sample::twosample_test(runif(100), runif(100), B=1000)$p.values
+```
+
+Next we find the smallest p value in each run for two selections of four methods. One is the selection found to be best above, namely Zhang's ZC and ZK methods, the methods by Kuiper and Wasserstein as well as a chi square test with a small number of bins. As a second selection we use the methods by Kolmogorov-Smirnov, Kuiper, Anderson-Darling, Cramer-vonMises and Lehman-Rosenblatt, which for this null data turn out to be highly correlated.
+
+```{r eval=FALSE}
+colnames(pvals)=names(R2sample::twosample_test(runif(100), runif(100), B=1000)$p.values)
+p1=apply(pvals[, c("ZK", "ZC", "Wassp1", "Kuiper", "ES small" )], 1, min)
+p2=apply(pvals[, c("KS", "Kuiper", "AD", "CvM", "LR")], 1, min)
+```
+
+Next we find the empirical distribution function for the two sets of p values and draw their graphs. We also add the curves for the cases of four identical tests and the case of four independent tests, which of course is the Bonferroni correction. The data for the cdfs is in the inst/extdata directory of the package.
+
+```{r}
+tmp=readRDS("../inst/extdata/pvaluecdf.rds")
+Tests=factor(c(rep("Identical Tests", nrow(tmp)),
+        rep("Correlated Selection", nrow(tmp)),
+        rep("Best Selection", nrow(tmp)),
+        rep("Independent Tests", nrow(tmp))),
+        levels=c("Identical Tests",  "Correlated Selection", 
+                 "Best Selection", "Independent Tests"),
+        ordered = TRUE)
+dta=data.frame(x=c(tmp[,1],tmp[,1],tmp[,1],tmp[,1]),
+          y=c(tmp[,1],tmp[,3],tmp[,2],1-(1-tmp[,1])^4),
+          Tests=Tests)
+ggplot2::ggplot(data=dta, ggplot2::aes(x=x,y=y,col=Tests))+
+  ggplot2::geom_line(linewidth=1.2)+
+  ggplot2::labs(x="p value", y="CDF")+
+  ggplot2::scale_color_manual(values=c("blue","red", "Orange", "green"))
+```
 
 
 # References 

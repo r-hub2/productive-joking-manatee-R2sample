@@ -10,7 +10,6 @@ using namespace Rcpp;
 //' @keywords internal
 //' @return A vector of test statistics
 // [[Rcpp::export]]
-
 NumericVector TS_disc(IntegerVector x, 
                       IntegerVector y, 
                       NumericVector vals,  

@@ -30,6 +30,7 @@ twosample_test_adjusted_pvalue=function(x, y, vals=NA, TS, TSextra, wx=rep(1, le
                              "ES large","ES small","EP large","EP small"),
                        disc=c("KS","Kuiper","CvM","AD","LR","ZA","Wassp1","large","small"))                                          
     samplingmethod=ifelse(samplingmethod=="independence", 1, 2)
+    if(length(B)==1) B=c(B, B)
     if(missing(TSextra)) TSextra = list(aaaa=0)
     if(any(is.na(vals))) Continuous=TRUE
     else Continuous=FALSE

@@ -69,3 +69,30 @@ twosample_test(x, y, B=500, maxProcessor = 2, doMethods=c("KS","AD"))
 #    f=function(n) list(x=rnorm(n), y=rnorm(n, 1)),
 #    n=10*1:10), "n")
 
+## ----eval=FALSE---------------------------------------------------------------
+#  pvals=matrix(0,1000,13)
+#  for(i in 1:1000)
+#    pvals[i, ]=R2sample::twosample_test(runif(100), runif(100), B=1000)$p.values
+
+## ----eval=FALSE---------------------------------------------------------------
+#  colnames(pvals)=names(R2sample::twosample_test(runif(100), runif(100), B=1000)$p.values)
+#  p1=apply(pvals[, c("ZK", "ZC", "Wassp1", "Kuiper", "ES small" )], 1, min)
+#  p2=apply(pvals[, c("KS", "Kuiper", "AD", "CvM", "LR")], 1, min)
+
+## -----------------------------------------------------------------------------
+tmp=readRDS("../inst/extdata/pvaluecdf.rds")
+Tests=factor(c(rep("Identical Tests", nrow(tmp)),
+        rep("Correlated Selection", nrow(tmp)),
+        rep("Best Selection", nrow(tmp)),
+        rep("Independent Tests", nrow(tmp))),
+        levels=c("Identical Tests",  "Correlated Selection", 
+                 "Best Selection", "Independent Tests"),
+        ordered = TRUE)
+dta=data.frame(x=c(tmp[,1],tmp[,1],tmp[,1],tmp[,1]),
+          y=c(tmp[,1],tmp[,3],tmp[,2],1-(1-tmp[,1])^4),
+          Tests=Tests)
+ggplot2::ggplot(data=dta, ggplot2::aes(x=x,y=y,col=Tests))+
+  ggplot2::geom_line(linewidth=1.2)+
+  ggplot2::labs(x="p value", y="CDF")+
+  ggplot2::scale_color_manual(values=c("blue","red", "Orange", "green"))
+
