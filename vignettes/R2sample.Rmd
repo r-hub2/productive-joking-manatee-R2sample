@@ -450,7 +450,7 @@ Arguments of *run.studies*:
 -  nsample=500: sample size  
 -  alpha=0.05: true type I error probability  
 -  param_alt: a vector of values of the parameter of the alternative distribution. If missing the ones included in R2sample are used. If more than one study is run this needs to be a list of vectors  
--  B=c(1000, 1000) number of simulation runs
+-  B=1000 number of simulation runs
 
 Arguments of routine to calculate new test:
 
