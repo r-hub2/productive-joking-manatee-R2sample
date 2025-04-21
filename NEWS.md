@@ -1,3 +1,10 @@
+# R2sample 4.0.0
+                It is no possible to use a routine to generate new simulated data to
+                find p values, the parametric bootstrap approach. This is needed for the
+                goodness-of-fit/twosample hybrid problem.
+                Also some changes to the hidden interior routines   
+# R2sample 3.1.1
+                Fixed a minor bug
 # R2sample 3.1.0
                 Improved the routines that do power calculations for better speed. 
                 Included a timing routine to see whether using a single core is 
