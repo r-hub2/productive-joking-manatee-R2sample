@@ -36,9 +36,11 @@
 #'  myTS=function(x,y) {z=c(mean(x)-mean(y),sd(x)-sd(y));names(z)=c("M","S");z}
 #'  cbind(twosample_power(f1, mu=c(0,2), TS=myTS,B=100, maxProcessor = 1),
 #'        twosample_power(f1, mu=c(0,2), B=100, maxProcessor = 1))
-#'  # Power estimation if routine returns a p value
+#'  # Power estimation if routine returns a p value, using two parameters for 
+#'  #  the alternative
+#'  f3=function(mu, n) list(x=rnorm(25), y=rnorm(n, mu))
 #'  myTS2=function(x, y) {out=ks.test(x,y)$p.value; names(out)="KSp"; out}      
-#'  twosample_power(f1, c(0,1), TS=myTS2, With.p.value = TRUE,  B=100)
+#'  twosample_power(f3, c(0,1), c(25, 30), TS=myTS2, With.p.value = TRUE,  B=100)
 #'  
 twosample_power=function(f, ..., TS, TSextra, With.p.value=FALSE, 
             alpha=0.05, B=1000, 
@@ -78,14 +80,12 @@ twosample_power=function(f, ..., TS, TSextra, With.p.value=FALSE,
     }
     if(length(avals)==1) {
       avals=rep(avals, length(bvals))
-      rnames=bvals   
     }    
     else {
       bvals=rep(bvals, length(avals))
-      rnames=avals
     }    
   }
-  else rnames=1:length(avals)
+
 # generate one data set as an example, do some setup 
   dta = rxy(avals[1], bvals[1])
   if(length(dta)<2 | length(dta)>4) {
@@ -213,7 +213,8 @@ twosample_power=function(f, ..., TS, TSextra, With.p.value=FALSE,
   }    
   else {
     if(With.p.value) {
-       pwr=power_newtest(TS, f, avals, TSextra, alpha, B)
+       pwr=power_newtest(TS, rxy, xparam=avals, yparam=bvals ,
+                         TSextra, alpha, B)
     }
     else {
        pwr=powerR(rxy=rxy, xparam=avals, yparam=bvals, TS=TS, typeTS, 
@@ -226,12 +227,9 @@ twosample_power=function(f, ..., TS, TSextra, With.p.value=FALSE,
                      "ES large", "ES small" , "EP large", "EP small")
   }  
   else colnames(pwr) = methodnames
-  rownames(pwr) = rnames
   if(!CustomTS) pwr = cbind(pwr, pwrchi)
-  if(nrow(pwr)==1) {
-    nm=colnames(pwr) 
-    pwr=c(pwr)
-    names(pwr)=nm
-  }  
+  if(length(list(...))==0) rownames(pwr)=NULL
+  if(length(list(...))==1) rownames(pwr)=avals
+  if(length(list(...))==2) rownames(pwr)=paste0(avals,"|",bvals)  
   round(pwr, 3)
 }

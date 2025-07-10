@@ -2,17 +2,19 @@
 % Please edit documentation in R/case.studies.R
 \name{case.studies}
 \alias{case.studies}
-\title{This function creates the functions needed to run the various case studies.}
+\title{Create case studies}
 \usage{
-case.studies(which, nsample = 500)
+case.studies(which, nsample = 500, ReturnCaseNames = FALSE)
 }
 \arguments{
 \item{which}{name of the case study.}
 
 \item{nsample}{=500, sample size.}
+
+\item{ReturnCaseNames}{=FALSE, should list of case studies be returned?}
 }
 \value{
-a list of functions
+a list of functions and vectors
 }
 \description{
 This function creates the functions needed to run the various case studies.

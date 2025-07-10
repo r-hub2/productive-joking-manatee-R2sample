@@ -68,28 +68,7 @@ run.studies <- function(TS, study, TSextra, With.p.value=FALSE, BasicComparison=
       else if(!is.list(param_alt)) param_alt=list(param_alt)
   }    
   if(NewParams) BasicComparison=FALSE
-  list.of.studies=c(
-  "uniform.linear",
-  "uniform.quadratic",
-  "uniform.bump",
-  "uniform.sine",
-  "beta22.betaaa",
-  "beta22.beta2a",
-  "normal.shift",
-  "normal.stretch",
-  "normal.t",
-  "normal.outlier1",
-  "normal.outlier2",
-  "exponential.gamma",
-  "exponential.weibull",
-  "exponential.bump",
-  "gamma.normal",
-  "normal.normalmixture",
-  "uniform.uniformmixture",
-  "uniform.betamixture",
-  "chisquare.noncentral",
-  "uniform.triangular"
-  )
+  list.of.studies=R2sample::case.studies(ReturnCaseNames=TRUE)
   if(Continuous) list.of.studies=paste0(list.of.studies,".cont")
   else list.of.studies=paste0(list.of.studies,".disc")
   if(missing(TSextra)) TSextra=list(aaa=1)

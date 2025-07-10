@@ -1,5 +1,8 @@
+# R2sample 4.1.1
+               Minor bug fixes    
+               
 # R2sample 4.1.0
-               User supplied routine can now also find p value for twosample_power
+               User supplied routine can now also return p value for twosample_power
                Some other minor changes
                
 # R2sample 4.0.1

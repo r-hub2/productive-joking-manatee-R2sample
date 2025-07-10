@@ -32,6 +32,7 @@ powerR=function(rxy, xparam, yparam,TS, typeTS, TSextra, alpha=0.05,
          tmp=powerC(rxy=rxy, xparam, yparam, TS, typeTS, TSextra, B=B)
          Data=tmp$Data
          Simulated=tmp$Simulated
+         paramalt=tmp$paramalt
     }  
     else { 
         z=parallel::clusterCall(cl, powerC, 
@@ -40,14 +41,17 @@ powerR=function(rxy, xparam, yparam,TS, typeTS, TSextra, alpha=0.05,
                               B=round(B/maxProcessor))
         Simulated=z[[1]][["Simulated"]]
         Data=z[[1]][["Data"]]
+        paramalt=z[[1]]["paramalt"]
         for(i in 2:maxProcessor) {
-          Permuted=rbind(Simulated,z[[i]][["Simulated"]])
+          Simulated=rbind(Simulated,z[[i]][["Simulated"]])
           Data=rbind(Data,z[[i]][["Data"]])
+          paramalt=rbind(param_alt,z[[i]]["paramalt"])
         }  
     }
     for(i in seq_along(xparam)) {
-       tmpD=Data[Data[,1]==xparam[i], -1, drop=FALSE]
-       tmpS=Simulated[Simulated[,1]==xparam[i], -1, drop=FALSE]
+       Index=c(1:nrow(Data))[paramalt[,1]==xparam[i]&paramalt[,2]==yparam[i]]
+       tmpD=Data[Index, , drop=FALSE]
+       tmpS=Simulated[Index, , drop=FALSE]
        crtval=apply(tmpS, 2, quantile, prob=1-alpha, na.rm=TRUE)
         for(j in seq_along(crtval)) 
          pwr[i, j]=sum(tmpD[ ,j]>crtval[j])/nrow(tmpD)

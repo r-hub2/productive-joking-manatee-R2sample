@@ -1,10 +1,21 @@
+#' Create case studies
+#' 
 #' This function creates the functions needed to run the various case studies.
+#'
 #' @param which name of the case study.
 #' @param nsample =500, sample size.
-#' @return a list of functions
-
-case.studies=function(which, nsample=500) {
-
+#' @param ReturnCaseNames =FALSE, should list of case studies be returned?
+#' @return a list of functions and vectors
+#' @export 
+case.studies=function(which, nsample=500, ReturnCaseNames =FALSE) {
+  list.of.studies=c(
+    "uniform.linear", "uniform.quadratic", "uniform.bump", "uniform.sine",
+    "beta22.betaaa", "beta22.beta2a", "normal.shift", "normal.stretch",
+    "normal.t", "normal.outlier1", "normal.outlier2", "exponential.gamma",
+    "exponential.weibull", "exponential.bump", "gamma.normal", "normal.normalmixture",
+    "uniform.uniformmixture", "uniform.betamixture", "chisquare.noncentral", "uniform.triangular"
+  )
+  if(ReturnCaseNames) return(list.of.studies)
   if(which=="uniform.linear.cont") {
      return(list(
        f=function(slope) {

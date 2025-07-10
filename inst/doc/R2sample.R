@@ -121,7 +121,8 @@ chitest = function(x, y, TSextra) {
 TSextra=list(nbins=5,statistic=FALSE)
 
 ## -----------------------------------------------------------------------------
-pwr=R2sample::run.studies(chitest, "uniform.linear", TSextra=TSextra, With.p.value = TRUE)
+pwr=R2sample::run.studies(chitest, "uniform.linear", 
+                          TSextra=TSextra, With.p.value = TRUE)
 R2sample::plot_power(pwr, "slope")
 
 ## ----eval=FALSE---------------------------------------------------------------
