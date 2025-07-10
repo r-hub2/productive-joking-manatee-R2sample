@@ -4,12 +4,10 @@
 \alias{power_newtest}
 \title{Power for tests with p values}
 \usage{
-power_newtest(TS, rxy, xparam, yparam, TSextra, alpha = 0.05, B = 1000)
+power_newtest(TS, f, xparam, yparam, TSextra, alpha = 0.05, B = 1000)
 }
 \arguments{
 \item{TS}{routine to calculate test statistics.}
-
-\item{rxy}{routine that generates data.}
 
 \item{xparam}{values of first parameter under the alternative hypothesis.}
 
@@ -20,6 +18,8 @@ power_newtest(TS, rxy, xparam, yparam, TSextra, alpha = 0.05, B = 1000)
 \item{alpha}{=0.05  type I error.}
 
 \item{B}{= 1000 number of simulation runs to estimate the power.}
+
+\item{rxy}{routine that generates data.}
 }
 \value{
 A matrix of power values

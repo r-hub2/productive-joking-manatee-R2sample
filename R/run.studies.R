@@ -93,7 +93,8 @@ run.studies <- function(TS, study, TSextra, With.p.value=FALSE, BasicComparison=
        if(!is.matrix(pwrold)) pwrold=rbind(pwrold)           
     }  
     if(!is.function(TS)) {out[[i]]=pwrold;next}  
-    if(With.p.value) pwr=power_newtest(TS, tmp$f, tmp$param_alt, TSextra, alpha, B[1])
+    if(With.p.value) pwr=power_newtest(TS, tmp$f, tmp$param_alt, 
+                        TSextra=TSextra, alpha=alpha, B=B[1])
     else  pwr=R2sample::twosample_power(tmp$f, tmp$param_alt, 
                                    TS=TS, TSextra=TSextra, alpha=alpha, 
                                    maxProcessor=maxProcessor, B=B)                                                                    
